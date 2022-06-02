@@ -1,0 +1,84 @@
+
+<div class="fixed-top"> 
+
+
+
+
+
+
+
+<nav class="navbar  navbar-light bg-light " >
+    <a class="navbar-brand" href="#">
+        <img src= "https://pedidos.praxair.com.co/oracle_logo_sm.png" >
+      </a>
+ 
+
+
+  
+    
+
+    <div *ngIf="loggedIn()" class="dropdown" dropdown>
+      <a class="nav-item active text-dark" >
+        Bienvenido/a:  <b>{{authService.decodedToken?.unique_name | titlecase}}</b>
+      </a>
+      
+    
+  
+  
+    </div>
+
+    <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()">
+      <input class="form-control mr-sm-2" type="text" name="codigoPaciente"
+      placeholder="Codigo Paciente"  required [(ngModel)]="model.codigoPaciente" >
+      <input class="form-control mr-sm-2" type="text" name="identificacion" 
+      placeholder="Identificación" required [(ngModel)]="model.identificacion">
+      <button    class="btn btn-info my-2 my-sm-0" type="submit"  [disabled]="!loginForm.form.valid">Ingresar</button>
+    </form>
+ 
+ 
+
+
+</nav>
+
+
+
+<nav  *ngIf="loggedIn()"  class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse"  (click)="toggleState()" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="navbar-collapse" id="navbarColor02" [ngClass]="{ 'collapse': isCollapsed  }" >
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" [routerLink]="['/pedidos']" routerLinkActive="router-link-active"><i class="fa fa-truck"> </i> Consultar de Pedidos <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/autorizaciones']" routerLinkActive="router-link-active"> <i class="fa fa-eye"> </i>Tomar Pedido </a>
+      </li>    
+    </ul>
+    <form class="form-inline my-2 my-lg-0">     
+      <ul class="navbar-nav mr-auto">    
+          <div *ngIf="loggedIn()" class="dropdown" (click)="logout()" dropdown>
+              <a class="dropdown-toggle text-light" dropdownToggle>
+                  <i class="fa fa-sign-out" ></i> Salir
+              </a>
+          </div>
+        
+        
+     
+      
+      </ul>
+    </form>
+  </div>
+</nav>
+
+
+
+
+
+</div>
+
+
+
+

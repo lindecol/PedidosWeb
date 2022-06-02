@@ -1,0 +1,340 @@
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+
+<ng-template #popupPedidos>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Generacion de Pedido</h4>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalRef.hide()" 
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="col-form-label" for="inputDefault"
+          >Direccion de Entrega</label
+        >
+        <select class="custom-select" id="cmbDomicilio" (change)="seleccionaDomicilio($event.target.value)">
+            <option value="0">Seleccione un Domicilio</option>
+          <option *ngFor="let item of domicilios" [value]="item.clave_dom"  >{{
+            item.direccion
+          }}</option>
+        </select>
+      </div>
+
+      <div class="alert alert-dismissible alert-info">
+        <button type="button" class="close" data-dismiss="alert">
+          &times;
+        </button>
+        <strong>Ayuda</strong> El pedido sera generado por los productos
+        seleccionados en la autorización.
+      </div>
+     
+              <table class="table table-hover table-info">
+                <thead>
+                  <tr>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Nombre</th>
+                  </tr>
+                </thead>
+                <tbody>
+                
+                  <div *ngFor="let autorizacion of autorizaciones" >
+                  <div *ngFor="let linea of autorizacion.lineasAutorizacion">
+                    <tr >
+                      <div *ngIf="linea.seleccionado">
+                      <td>{{ linea.artid }}</td>
+                      <td>{{ linea.artdscven }}</td>
+                    </div>
+                 
+                    </tr>
+                  </div>
+                  </div>
+                
+                </tbody>
+              </table>
+           
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success"    [disabled]="domicilio==0"    (click)="guardar(PopupConfirmacion)">
+        <i class="fa fa-save"> </i> Guardar
+      </button>
+      <button
+        type="button"
+        class="btn btn-secondary"
+        data-dismiss="modal"
+        (click)="cancelar()"
+      >
+        <i class="fa fa-window-close"> </i> Cerrar
+      </button>
+    </div>
+</ng-template>
+<ng-template #popupAyuda>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Ayuda Generacion de Pedidos</h4>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalAyuda.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-dismissible alert-info">
+        <button type="button" class="close" data-dismiss="alert">
+          &times;
+        </button>
+        <strong>1 Verifique los productos </strong>
+        solo podra generar un pedido por los productos que tengan cantidad
+        disponible <br>
+        <span class="badge badge-success">Disponible  :</span> : Producto disponible para su Orden<br>
+        <span class="badge badge-danger">No Asignado  :</span> El producto aun no ha sido asignado debe comunicarse con la linea de atencion al cliente<br>
+        <span class="badge badge-danger">No Disponible:</span> El producto no se encuentra disponible, puede deberse a que ha agotado la cantidad autorizada por su entidad <br>
+
+      </div>
+      <div class="alert alert-dismissible alert-info">
+        <button type="button" class="close" data-dismiss="alert">
+          &times;
+        </button>
+        <strong>2 Seleccione los productos que desea cargar </strong>
+        marque los productos para la generacion de su pedido
+        <div class="custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch1"
+            checked=""
+          />
+          <label class="custom-control-label" for="customSwitch1"></label>
+        </div>
+      </div>
+
+      <div class="alert alert-dismissible alert-info">
+        <button type="button" class="close" data-dismiss="alert">
+          &times;
+        </button>
+        <strong>3 Verifique la direccion de entrega </strong>
+        verifique la direccion de entrega y los productos seleccionados, haga
+        clic en guardar
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #PopupConfirmacion>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Pedidos</h4>
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="modalConfirmacion.hide()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-dismissible alert-info">
+        <button type="button" class="close" data-dismiss="alert">
+          &times;
+        </button>
+        <div *ngIf="codigoPedido!=-1 && codigoPedido!=-2 && codigoPedido!=-3 && codigoPedido!=-4">           
+          Se ha generado pedido Nro: <strong> {{codigoPedido}} </strong> Haga clic en el boton Ver Pedido Para visualizarlo
+       
+        </div>
+        <div *ngIf="codigoPedido==-1">           
+          En este momento el paciente no cuenta con productos asignados para generar la solicitud, por favor comuniquese con la línea de servicio al cliente 018000 527 527 a nivel nacional y para Bogotá 705 2000
+        </div>
+
+        <div *ngIf="codigoPedido==-2">           
+        El paciente ya cuenta con un pedido programado, por favor comuniquese con la línea de servicio al cliente 018000 527 527 a nivel nacional y para Bogotá 705 2000
+        </div>
+
+        <div *ngIf="codigoPedido==-3">           
+          El paciente ya cuenta con un pedido de backup tomado por Oxigeno Medicinal en Cilindro, por favor comuniquese con la línea de servicio al cliente 018000 527 527 a nivel nacional y para Bogotá 705 2000
+          </div>
+
+        
+          <div *ngIf="codigoPedido==-4">           
+            La region seleccionada no cuenta con cobertura para atencion de pedidos , por favor comuniquese con la línea de servicio al cliente 018000 527 527 a nivel nacional y para Bogotá 705 2000
+            </div>
+
+      </div>
+
+    
+
+
+
+    </div>
+    
+    <div class="modal-footer">
+      <button  *ngIf="codigoPedido!=-1 && codigoPedido!=-2 && codigoPedido!=-3 && codigoPedido!=-4" [routerLink]="['/pedidos']" tooltip="Haga clic aqui para Visualizar el pedido"  (click)="modalConfirmacion.hide()" 
+      type="button"
+      class="btn btn-success" >
+      <i class="fa fa-question-truck"> </i> Ver Pedido
+    </button>
+      </div>
+  </ng-template>
+
+<br>
+<div *ngIf="cambioEntidad==0">
+  
+<div  class="card-header" *ngFor="let autorizacion of autorizaciones">
+  
+
+    <div class="card border-light mb-3">
+      <div class="card-header"  >
+        <i class="fa fa-ambulance"> </i>  <b> Numero Autorizacion</b> {{ autorizacion.num_id_autorizacion }} <br />
+      </div>
+      <div class="card-body">
+          <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                 
+                    <div class="alert alert-dismissible alert-success">
+                       
+                        <strong>Informacion Paciente</strong>
+                      </div> 
+                    <i class="fa fa-bookmark"> </i>  <b> Codigo Entidad </b> {{ autorizacion.client_entidad }} <br >
+                    <b> Nombre Entidad </b> {{ autorizacion.nombre_entidad }} <br />
+                    <i class="fa fa-bookmark"> </i> <b> Codigo Paciente </b> {{ autorizacion.idpaciente }} <b>Nombre </b>
+                    {{ autorizacion.nombre_paciente }} <br />
+                    <i class="fa fa-calendar"> </i> <b> Fecha Inicial </b> {{ autorizacion.fecha_ini_aut }} <br>
+                    <i class="fa fa-calendar"> </i> <b> Fecha Final </b> {{ autorizacion.fecha_fin_aut }} <br /><br />                                
+                    <i class="fa fa-check-circle"> </i>  <b> Estado </b>
+                    <span class="badge badge-info">{{ autorizacion.estado_aut }}</span>
+                   
+                </div>
+                <div class="col-sm">
+                   
+                    <div class="alert alert-dismissible alert-success">                       
+                        <strong>Productos Autorizados</strong>
+                      </div>
+                    <table class="table table-hover table-info">
+        
+                        <thead>
+                          <tr>
+                           <!-- <th scope="col">Item</th>-->
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cant. <br> Aut</th>
+                           <!-- <th scope="col">Cant. Disponible</th>-->
+                            <th scope="col">Consumo</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let linea of autorizacion.lineasAutorizacion">
+                              
+                  
+                         <!-- <td>{{ linea.artid }}</td>-->
+                            <td>{{ linea.artdscven }}</td>
+                            <td>{{ linea.cantidad_autorizada }}</td>     
+                          <!--  <td>{{ linea.cantidad_autorizada - linea.cant_consumo }}</td>-->
+                            <td>{{linea.cant_consumo}}</td>
+                            <td>
+                              <div class="form-group">
+                                <div class="custom-control custom-switch"  tooltip="Seleccione los productos que desea para su pedido">
+                                  <input *ngIf=" linea.cantidad_autorizada - linea.cant_consumo > 0  && linea.asignado> 0
+                                  ? true
+                                  : false
+                              "
+                                    type="checkbox"
+                                    class="custom-control-input"
+                                    id="{{  'customSwitch1' + linea.num_id_autorizacion+'-'+linea.artid}}"
+                                    [(ngModel)]="linea.seleccionado"  
+                                    (click)="evaluarAsignacion(linea)"               
+                                   
+                                  />
+                                  <label  
+                                    class="custom-control-label"   
+                                    for="{{ 'customSwitch1' + linea.num_id_autorizacion+'-'+linea.artid }}"
+                                  >
+                                    <span
+                                      *ngIf="
+                                        linea.cantidad_autorizada - linea.cant_consumo > 0 && linea.asignado> 0
+                                          ? true
+                                          : false
+                                      "
+                                      class="badge badge-success"
+                                      >disponible</span
+                                    >
+                                    
+                                    <span
+                                    *ngIf="
+                                      linea.asignado== 0 
+                                        ? true
+                                        : false
+                                    "
+                                    class="badge badge-danger"
+                                    >No asignado</span>
+                                    <span
+                                      *ngIf="
+                                        linea.cantidad_autorizada - linea.cant_consumo > 0 
+                                          ? false
+                                          : true
+                                      "
+                                      class="badge badge-danger"
+                                      >No Disponible</span>
+                                      </label
+                                  >
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+
+
+
+
+</div>
+
+<div class="alert alert-dismissible alert-info" role="alert" *ngIf="getCantidadProductos()">
+    Usted no cuenta con productos autorizados o  asignaciones activas, por favor comuniquese con la línea de servicio al cliente <b>018000 527 527 </b> a nivel nacional y para Bogotá <b>705 2000</b>
+</div> 
+
+</div>
+  <div class="alert alert-dismissible alert-info" role="alert" *ngIf="cambioEntidad==1">
+    Usted  cuenta con mas de una EPS asociada, por favor comuniquese con la línea de servicio al cliente <b>018000 527 527 </b> a nivel nacional y para Bogotá <b>705 2000</b>
+  </div> 
+  <nav class="navbar fixed-bottom navbar-light bg-light">   
+      <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <button   tooltip="Haga clic aqui para generar el pedido de acuerdo a los productos seleccionados"
+                (click)="openModal(popupPedidos)"
+                type="button"
+                class="btn btn-success"
+              >
+                <i class="fa fa-share-square"> </i> Generar Pedido
+              </button>
+              <button  tooltip="Haga clic aqui para obtener ayuda con respecto al uso de la herramienta"
+                (click)="abrirAyuda(popupAyuda)"
+                type="button"
+                class="btn btn-info"
+              >
+                <i class="fa fa-question-circle"> </i> Ayuda
+              </button>
+
+              </form>
+
+  </nav>

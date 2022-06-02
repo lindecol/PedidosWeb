@@ -1,0 +1,61 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+
+    <div class="card-header "    *ngFor= "let pedido of pedidos">
+            <div class="card border-light mb-3" >
+                <div class="card-header">   <i class="fa fa-bookmark"> </i>   <b> Codigo pedido</b>   {{pedido.codigoPedido}} </div>
+           <div class="card-body">
+              <b> <i class="fa fa-calendar"> </i> Fecha de Solicitud </b>  {{pedido.fechaTomaPedido}}  <b><i class="fa fa-calendar"> </i> Fecha Entrega </b> {{pedido.fechaEntrega}}  <br>
+            <b><i class="fa fa-home"> </i> Direccion de Entrega </b> {{pedido.direccion}}<br> 
+            <b><i class="fa fa-check-square"> </i> Estado </b> <span class="badge badge-info">{{pedido.estado}}</span> <br>
+
+              <b><i class="fa fa-truck"> </i> Ruta </b>  <span class="badge badge-primary"> {{pedido.ruta}}</span><br>
+              <br>
+              <button  (click)="establecerDetalle(pedido)" type="button" class="btn btn-info"><i class="fa fa-arrow-circle-down"> </i> Ver Detalle de pedido</button>
+                  
+                              </div>
+                            </div>
+
+                            <div class="alert alert-dismissible alert-info" role="alert">
+                                <b>Observaciones </b> <br>
+                                {{pedido.observaciones}}<br> 
+                              </div> 
+              <table *ngIf="pedido.verDetalle" class="table table-hover table-info">
+                  <caption>Lista de Productos</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Codigo Producto</th>
+                      <th scope="col">Nombre Producto</th>
+                      <th scope="col">Cantidad</th>      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor= "let linea of pedido.lineas">        
+                      <td>{{linea.codigoProducto}}</td>
+                      <td>{{linea.nombreProducto}}</td>
+                      <td>{{linea.cantidad}}</td>
+                    </tr>
+                  
+                  
+                  </tbody>
+                </table>        
+       
+      </div>
+
+
+  
+<br>
+<br>
+<br>
+<div class="alert alert-dismissible alert-info" role="alert" *ngIf="!tienePedidos()">
+    Usted no cuenta con pedidos registrados,  por favor ingrese a la opcion Pedidos ó comuniquese con la línea de servicio al cliente <b>018000 527 527 </b> a nivel nacional y para Bogotá <b>705 2000</b>
+
+  </div> 
+

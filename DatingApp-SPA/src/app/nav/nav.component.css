@@ -1,0 +1,15 @@
+.dropdown-toggle, .dropdown-item{
+
+    cursor: pointer;
+}
+
+.bg-primary {
+    background-color: #242231 !important;
+    border-color: #ba1e0d00 !important;
+}
+
+a {
+    color: #0e0e0e;
+    text-decoration: none;
+    background-color: transparent;
+}
